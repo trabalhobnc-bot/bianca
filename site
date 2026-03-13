@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bianca Vilas Boas — Designer & Dev</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --white: #fafaf8;
+    --coral: #e8521e;
+    --coral-light: #ff8c64;
+    --sage: #2d6147;
+    --sage-light: #4a9168;
+    --gold: #c9903a;
+    --muted: #888880;
+    --border: #e2e2dc;
+    --bg2: #f4f4f0;
+    --card: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--coral);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--coral);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.35s ease, width 0.3s, height 0.3s, border-color 0.2s;
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+  }
+  .cursor.hover { transform: translate(-50%, -50%) scale(2.5); background: var(--coral-light); }
+  .cursor-ring.hover { width: 60px; height: 60px; opacity: 0.3; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid var(--border);
+    z-index: 100;
+    transition: padding 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--coral); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1.5px; background: var(--coral); transform: scaleX(0);
+    transition: transform 0.25s ease; transform-origin: left;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    font-size: 0.82rem; font-weight: 500;
+    background: var(--ink); color: var(--white);
+    padding: 0.55rem 1.4rem; border-radius: 2rem;
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--coral); transform: translateY(-1px); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 7rem 3rem 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-shape {
+    position: absolute; right: -120px; top: 50%;
+    transform: translateY(-50%);
+    width: 620px; height: 620px;
+    background: radial-gradient(circle, #ffe8dc 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pulse-bg 6s ease-in-out infinite;
+  }
+  @keyframes pulse-bg {
+    0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.6; }
+    50% { transform: translateY(-50%) scale(1.08); opacity: 1; }
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--coral);
+    background: #fff0ea; border: 1px solid #ffd5c2;
+    padding: 0.4rem 1rem; border-radius: 2rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--coral); border-radius: 50%;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.2rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  .hero-title .line { overflow: hidden; display: block; }
+  .hero-title .accent { color: var(--coral); }
+  .hero-title .stroke {
+    -webkit-text-stroke: 2px var(--ink);
+    color: transparent;
+  }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.05rem; font-weight: 300; color: var(--muted);
+    line-height: 1.7; max-width: 420px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 1.2rem;
+    margin-top: 2.2rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--ink); color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 2.5rem;
+    font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  .btn-primary:hover {
+    background: var(--coral); transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(232,82,30,0.35);
+  }
+  .btn-secondary {
+    font-size: 0.9rem; font-weight: 500; color: var(--muted);
+    text-decoration: none; display: flex; align-items: center; gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--ink); }
+  .btn-arrow { font-size: 1.1rem; transition: transform 0.2s; }
+  .btn-secondary:hover .btn-arrow { transform: translateX(4px); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem; font-weight: 800; line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .stat-num .unit { font-size: 1.2rem; }
+  .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0.04em; }
+
+  /* HERO RIGHT — mockup stack */
+  .hero-visual {
+    position: relative; height: 520px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .mockup-card {
+    position: absolute;
+    background: var(--card);
+    border-radius: 16px;
+    border: 0.5px solid var(--border);
+    box-shadow: 0 16px 60px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.4s ease;
+  }
+  .mockup-card:hover { transform: translateY(-8px) rotate(0deg) !important; }
+
+  .mc-main {
+    width: 320px; height: 360px;
+    right: 20px; top: 60px;
+    transform: rotate(2deg);
+  }
+  .mc-side {
+    width: 220px; height: 260px;
+    left: 0; top: 100px;
+    transform: rotate(-3deg);
+    z-index: 2;
+  }
+  .mc-float {
+    width: 160px; height: 80px;
+    right: 0; bottom: 40px;
+    transform: rotate(1deg);
+    z-index: 3;
+    display: flex; flex-direction: column;
+    justify-content: center; padding: 1rem 1.2rem;
+    gap: 0.3rem;
+  }
+  .mc-accent { font-size: 0.65rem; color: var(--coral); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .mc-value { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; }
+  .mc-sub { font-size: 0.68rem; color: var(--muted); }
+
+  .mockup-browser {
+    background: #f0f0ee;
+    height: 28px; display: flex; align-items: center; padding: 0 12px; gap: 5px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-r { background: #ff6b6b; }
+  .dot-y { background: #ffd93d; }
+  .dot-g { background: #6bcb77; }
+  .url-bar {
+    flex: 1; background: white; border-radius: 20px;
+    height: 16px; margin: 0 8px; display: flex; align-items: center;
+    padding: 0 8px;
+  }
+  .url-text { font-size: 7px; color: var(--muted); }
+  .mockup-content { padding: 14px; height: calc(100% - 28px); }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--ink); color: var(--white);
+    padding: 1rem 0; overflow: hidden;
+    border-top: 0.5px solid #222; border-bottom: 0.5px solid #222;
+  }
+  .marquee-track {
+    display: flex; gap: 3rem;
+    animation: marquee 18s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item {
+    font-family: 'Syne', sans-serif; font-size: 0.78rem;
+    font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 1rem;
+    flex-shrink: 0;
+  }
+  .marquee-dot { color: var(--coral); font-size: 1.2rem; }
+
+  /* SECTIONS */
+  section { padding: 6rem 3rem; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--coral);
+    display: flex; align-items: center; gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .section-label::before { content: ''; width: 24px; height: 1.5px; background: var(--coral); }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.03em; margin-bottom: 1rem;
+  }
+  .section-sub { font-size: 1rem; color: var(--muted); font-weight: 300; max-width: 480px; line-height: 1.7; }
+
+  /* SOBRE */
+  #sobre {
+    background: var(--bg2);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .sobre-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--white); border: 0.5px solid var(--border);
+    padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.78rem; color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .skill-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .chip {
+    font-size: 0.78rem; font-weight: 500; padding: 0.4rem 0.9rem;
+    border-radius: 2rem; border: 1px solid var(--border);
+    background: var(--white); color: var(--ink);
+    transition: all 0.2s;
+  }
+  .chip:hover { background: var(--coral); color: white; border-color: var(--coral); transform: translateY(-2px); }
+  .chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+  .sobre-visual {
+    position: relative;
+  }
+  .profile-frame {
+    width: 100%; aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #f0ece6 0%, #e8e0d6 100%);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .profile-initials {
+    font-family: 'Syne', sans-serif;
+    font-size: 6rem; font-weight: 800;
+    color: rgba(13,13,13,0.12); letter-spacing: -0.05em;
+    user-select: none;
+  }
+  .profile-tag {
+    position: absolute; bottom: 24px; left: 24px; right: 24px;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+    border-radius: 12px; padding: 1rem 1.2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .profile-tag-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
+  .profile-tag-role { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .available-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  /* PROJETOS */
+  #projetos { background: var(--white); }
+  .projects-intro { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+  .project-card {
+    border-radius: 20px; overflow: hidden;
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.1);
+  }
+  .project-card.featured {
+    grid-column: span 2;
+    display: grid; grid-template-columns: 1fr 1.2fr;
+  }
+
+  .project-visual {
+    aspect-ratio: 4/3; position: relative; overflow: hidden;
+  }
+  .project-card.featured .project-visual { aspect-ratio: auto; min-height: 320px; }
+
+  .project-inner-mockup {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+
+  .project-meta {
+    padding: 1.5rem 1.8rem 1.8rem;
+  }
+  .project-card.featured .project-meta { padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+
+  .project-type {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .project-card.featured .project-name { font-size: 1.9rem; }
+  .project-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  .project-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1rem; }
+  .project-tag {
+    font-size: 0.7rem; padding: 0.25rem 0.7rem; border-radius: 2rem;
+    border: 0.5px solid var(--border); color: var(--muted);
+  }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.82rem; font-weight: 600; margin-top: 1.5rem;
+    color: var(--ink); text-decoration: none;
+    transition: gap 0.2s, color 0.2s;
+  }
+  .project-card.featured .project-link { color: var(--coral); }
+  .project-link:hover { gap: 0.7rem; color: var(--coral); }
+  .project-hover-overlay {
+    position: absolute; inset: 0; background: rgba(232,82,30,0.06);
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .project-card:hover .project-hover-overlay { opacity: 1; }
+
+  /* NUMBERS */
+  #numeros {
+    background: var(--ink); color: var(--white);
+    text-align: center;
+  }
+  #numeros .section-label { justify-content: center; color: var(--coral-light); }
+  #numeros .section-label::before { background: var(--coral-light); }
+  #numeros .section-title { color: var(--white); }
+  .numbers-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: #1e1e1e; border-radius: 20px; overflow: hidden;
+    margin-top: 3rem;
+  }
+  .number-item {
+    background: var(--ink); padding: 2.5rem 2rem;
+    transition: background 0.2s;
+  }
+  .number-item:hover { background: #141414; }
+  .number-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem; font-weight: 800; line-height: 1;
+    letter-spacing: -0.04em; color: var(--coral);
+    margin-bottom: 0.5rem;
+  }
+  .number-label { font-size: 0.85rem; color: #888; font-weight: 300; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    margin-top: 2rem;
+    background: #1a1a1a; border-radius: 10px; padding: 1rem 1.5rem;
+    font-size: 0.78rem; color: #555; font-style: italic;
+    border-left: 3px solid var(--coral);
+    text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;
+  }
+
+  /* CONTATO */
+  #contato {
+    background: var(--bg2);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .contact-form-wrap {
+    background: var(--white); border-radius: 20px;
+    padding: 2.5rem; border: 0.5px solid var(--border);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+  }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-label { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 0.5rem; }
+  .form-input {
+    width: 100%; padding: 0.85rem 1rem;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem; color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(232,82,30,0.1); }
+  textarea.form-input { resize: vertical; min-height: 110px; }
+  .form-btn {
+    width: 100%; padding: 1rem; border-radius: 10px;
+    background: var(--ink); color: var(--white);
+    font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700;
+    border: none; cursor: none; letter-spacing: 0.04em;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .form-btn:hover { background: var(--coral); transform: translateY(-2px); }
+
+  .contact-info {}
+  .contact-direct {
+    margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--white); border-radius: 14px; padding: 1rem 1.4rem;
+    border: 0.5px solid var(--border);
+    text-decoration: none; color: var(--ink);
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .contact-item:hover {
+    transform: translateX(6px);
+    border-color: var(--coral);
+    box-shadow: 0 4px 20px rgba(232,82,30,0.1);
+  }
+  .contact-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .contact-text-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .contact-text-val { font-weight: 500; font-size: 0.9rem; margin-top: 1px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); color: #555;
+    padding: 2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.78rem;
+  }
+  footer .logo { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--white); font-size: 0.95rem; }
+  footer .logo span { color: var(--coral); }
+  footer a { color: #555; text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--coral); }
+
+  /* REVEAL ANIMATION */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* PROJECT MOCKUPS SVG */
+  .pm-browser { background: #f0f0ee; border-radius: 8px 8px 0 0; padding: 6px 10px; display: flex; align-items: center; gap: 4px; }
+  .pm-dots { display: flex; gap: 4px; }
+  .pm-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .pm-url { flex: 1; background: white; border-radius: 20px; height: 12px; margin-left: 6px; }
+  .pm-body { background: white; border-radius: 0 0 8px 8px; padding: 10px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; }
+    .hero-visual { display: none; }
+    section { padding: 4rem 1.5rem; }
+    #sobre { grid-template-columns: 1fr; gap: 2rem; }
+    .sobre-visual { order: -1; max-width: 300px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+    #contato { grid-template-columns: 1fr; gap: 2.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .nav-links { display: none; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">BV<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#numeros">Resultados</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Contratar →</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-left">
+    <div class="hero-tag">Disponível para projetos</div>
+    <h1 class="hero-title">
+      <span class="line">Design que</span>
+      <span class="line accent">converte.</span>
+      <span class="line stroke">Código que</span>
+      <span class="line">funciona.</span>
+    </h1>
+    <p class="hero-sub">
+      Sou Bianca — designer gráfica e estudante de Sistemas de Informação. Crio layouts de sites, e-commerces e landing pages que parecem profissionais e geram resultado de verdade.
+    </p>
+    <div class="hero-actions">
+      <a href="#projetos" class="btn-primary">Ver meus projetos <span>↓</span></a>
+      <a href="#contato" class="btn-secondary">Contratar <span class="btn-arrow">→</span></a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">35<span class="unit">+</span></div>
+        <div class="stat-label">Trabalhos entregues</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100<span class="unit">%</span></div>
+        <div class="stat-label">Satisfação</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">48<span class="unit">h</span></div>
+        <div class="stat-label">Entrega média</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <!-- Mockup principal -->
+    <div class="mockup-card mc-main">
+      <div class="mockup-browser">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="url-bar"><span class="url-text">dulcestore.com.br</span></div>
+      </div>
+      <div class="mockup-content" style="background:#FAF0E8;">
+        <div style="background:#e8521e;height:3px;border-radius:2px;margin-bottom:10px;"></div>
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:#0d0d0d;margin-bottom:4px;">NOVA COLEÇÃO</div>
+        <div style="font-size:8px;color:#888;margin-bottom:10px;">Verão 2024 — até 40% off</div>
+        <div style="background:#e8521e;border-radius:20px;padding:4px 14px;display:inline-block;font-size:7px;font-weight:700;color:white;margin-bottom:14px;">Ver coleção</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="background:white;border-radius:8px;padding:8px;">
+            <div style="background:#f5c5b0;border-radius:4px;height:60px;margin-bottom:6px;"></div>
+            <div style="font-size:7px;color:#888;">Blusa Linho</div>
+            <div style="font-size:9px;font-weight:700;color:#e8521e;">R$ 189</div>
+          </div>
+          <div style="background:white;border-radius:8px;padding:8px;">
+            <div style="background:#f5c5b0;border-radius:4px;height:60px;margin-bottom:6px;"></div>
+            <div style="font-size:7px;color:#888;">Vestido Verão</div>
+            <div style="font-size:9px;font-weight:700;color:#e8521e;">R$ 249</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mockup lateral -->
+    <div class="mockup-card mc-side">
+      <div class="mockup-browser">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="url-bar"><span class="url-text">flowtech.io</span></div>
+      </div>
+      <div class="mockup-content" style="background:#0E1A14;">
+        <div style="font-size:7px;color:#6BCB77;font-weight:700;letter-spacing:0.1em;margin-bottom:5px;">AUTOMAÇÃO B2B</div>
+        <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:white;line-height:1.2;margin-bottom:6px;">Automatize em 10 minutos.</div>
+        <div style="background:#3A6B4A;border-radius:20px;padding:4px 12px;display:inline-block;font-size:7px;font-weight:700;color:white;margin-bottom:12px;">Testar grátis</div>
+        <div style="display:flex;gap:6px;">
+          <div style="background:#1e3228;border-radius:6px;padding:8px;flex:1;text-align:center;">
+            <div style="font-size:14px;font-weight:800;color:#6BCB77;font-family:'Syne',sans-serif;">+210%</div>
+            <div style="font-size:6px;color:#555;">Cliques no CTA</div>
+          </div>
+          <div style="background:#1e3228;border-radius:6px;padding:8px;flex:1;text-align:center;">
+            <div style="font-size:14px;font-weight:800;color:#6BCB77;font-family:'Syne',sans-serif;">-74%</div>
+            <div style="font-size:6px;color:#555;">Taxa rejeição</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Float card -->
+    <div class="mockup-card mc-float">
+      <div class="mc-accent">Conversão</div>
+      <div class="mc-value" style="color:var(--coral);">+127%</div>
+      <div class="mc-sub">Dulce Store após redesign</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">E-commerce <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Landing Page <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">UI Design <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Prototipagem Figma <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Web Design <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Style Guide <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Desenvolvimento Web <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">E-commerce <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Landing Page <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">UI Design <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Prototipagem Figma <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Web Design <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Style Guide <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Desenvolvimento Web <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="sobre-content reveal">
+    <div class="section-label">Quem sou eu</div>
+    <h2 class="section-title">Design com propósito,<br>código com precisão.</h2>
+    <p class="section-sub">
+      Sou estudante de Sistemas de Informação com experiência prática em desenvolvimento web, prototipagem de telas e criação de layouts. Já entreguei mais de 35 projetos para clientes de diferentes segmentos — sempre focando em design funcional e interfaces que facilitam a vida do usuário.
+    </p>
+    <div class="skill-chips">
+      <span class="chip active">Figma</span>
+      <span class="chip">Adobe XD</span>
+      <span class="chip">Illustrator</span>
+      <span class="chip">Photoshop</span>
+      <span class="chip">Canva Pro</span>
+      <span class="chip">HTML / CSS</span>
+      <span class="chip">JavaScript</span>
+      <span class="chip">UI Design</span>
+      <span class="chip">Prototipagem</span>
+    </div>
+  </div>
+  <div class="sobre-visual reveal" style="transition-delay:0.2s">
+    <div class="profile-frame">
+      <div class="profile-initials">BV</div>
+      <div class="profile-tag">
+        <div>
+          <div class="profile-tag-name">Bianca Vilas Boas</div>
+          <div class="profile-tag-role">Designer Gráfica & Dev</div>
+        </div>
+        <div class="available-dot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="projects-intro reveal">
+    <div>
+      <div class="section-label">Portfólio</div>
+      <h2 class="section-title">Trabalhos selecionados</h2>
+    </div>
+    <p class="section-sub" style="font-size:0.85rem;">+35 projetos entregues. Aqui estão alguns destaques.</p>
+  </div>
+
+  <div class="projects-grid">
+    <!-- FEATURED: Dulce Store -->
+    <div class="project-card featured reveal">
+      <div class="project-visual" style="background:#FAF0E8;">
+        <div class="project-inner-mockup">
+          <div style="width:100%;max-width:340px;">
+            <div class="pm-browser">
+              <div class="pm-dots"><div class="pm-dot" style="background:#ff6b6b;"></div><div class="pm-dot" style="background:#ffd93d;"></div><div class="pm-dot" style="background:#6bcb77;"></div></div>
+              <div class="pm-url"></div>
+            </div>
+            <div class="pm-body" style="background:#FAF0E8;">
+              <div style="background:#e8521e;height:2px;margin-bottom:8px;border-radius:2px;"></div>
+              <div style="font-size:8px;color:#888;letter-spacing:0.1em;margin-bottom:4px;">NOVA COLEÇÃO</div>
+              <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;line-height:1.1;margin-bottom:6px;">Verão 2024<br><span style="color:#e8521e;">— até 40% off</span></div>
+              <div style="background:#e8521e;border-radius:20px;padding:5px 16px;display:inline-block;font-size:8px;color:white;font-weight:700;margin-bottom:12px;">Ver coleção →</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+                <div style="background:white;border-radius:8px;overflow:hidden;">
+                  <div style="background:#f5c5b0;height:50px;"></div>
+                  <div style="padding:6px;"><div style="font-size:7px;color:#888;">Blusa Linho</div><div style="font-size:9px;font-weight:700;color:#e8521e;">R$189</div></div>
+                </div>
+                <div style="background:white;border-radius:8px;overflow:hidden;">
+                  <div style="background:#e8c4b0;height:50px;"></div>
+                  <div style="padding:6px;"><div style="font-size:7px;color:#888;">Vestido Chiffon</div><div style="font-size:9px;font-weight:700;color:#e8521e;">R$249</div></div>
+                </div>
+                <div style="background:white;border-radius:8px;overflow:hidden;">
+                  <div style="background:#f0d5c4;height:50px;"></div>
+                  <div style="padding:6px;"><div style="font-size:7px;color:#888;">Saia Midi</div><div style="font-size:9px;font-weight:700;color:#e8521e;">R$159</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hover-overlay"></div>
+      </div>
+      <div class="project-meta">
+        <div class="project-type" style="color:var(--coral);">Case 01 · E-commerce</div>
+        <div class="project-name">Dulce Store</div>
+        <p class="project-desc">Redesign completo de loja virtual de moda feminina. Novo layout, sistema de cores, tipografia e componentes que elevaram a experiência de compra.</p>
+        <div class="project-tags">
+          <span class="project-tag">Figma</span>
+          <span class="project-tag">E-commerce</span>
+          <span class="project-tag">UI Design</span>
+          <span class="project-tag">Style Guide</span>
+        </div>
+        <div style="display:flex;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;">
+          <div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Conversão</div><div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--coral);">+127%</div></div>
+          <div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Tempo na página</div><div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--coral);">+89%</div></div>
+          <div><div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Aprovação</div><div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--coral);">4.8/5</div></div>
+        </div>
+        <a href="#contato" class="project-link">Ver detalhes do case →</a>
+      </div>
+    </div>
+
+    <!-- FlowTech -->
+    <div class="project-card reveal" style="transition-delay:0.1s">
+      <div class="project-visual" style="background:#0E1A14;">
+        <div class="project-inner-mockup">
+          <div style="width:100%;max-width:300px;">
+            <div class="pm-browser" style="background:#1a2e20;">
+              <div class="pm-dots"><div class="pm-dot" style="background:#ff6b6b;"></div><div class="pm-dot" style="background:#ffd93d;"></div><div class="pm-dot" style="background:#6bcb77;"></div></div>
+              <div class="pm-url" style="background:#0e1a14;"></div>
+            </div>
+            <div class="pm-body" style="background:#0E1A14;padding:14px;">
+              <div style="font-size:7px;color:#6BCB77;font-weight:700;letter-spacing:0.12em;margin-bottom:5px;">AUTOMAÇÃO INTELIGENTE</div>
+              <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:white;line-height:1.2;margin-bottom:6px;">Automatize seu fluxo em 10 minutos.</div>
+              <div style="background:#3A6B4A;border-radius:20px;padding:4px 14px;display:inline-block;font-size:7px;font-weight:700;color:white;margin-bottom:10px;">Começar grátis →</div>
+              <div style="font-size:6px;color:#444;margin-bottom:10px;">+1.200 empresas confiam • Nota 4.9/5</div>
+              <div style="display:flex;gap:6px;">
+                <div style="background:#1e3228;border-radius:6px;padding:8px;flex:1;text-align:center;"><div style="font-size:13px;font-weight:800;color:#6BCB77;font-family:'Syne',sans-serif;">+210%</div><div style="font-size:6px;color:#555;margin-top:2px;">Cliques CTA</div></div>
+                <div style="background:#1e3228;border-radius:6px;padding:8px;flex:1;text-align:center;"><div style="font-size:13px;font-weight:800;color:#6BCB77;font-family:'Syne',sans-serif;">-74%</div><div style="font-size:6px;color:#555;margin-top:2px;">Rejeição</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hover-overlay" style="background:rgba(58,107,74,0.1)"></div>
+      </div>
+      <div class="project-meta">
+        <div class="project-type" style="color:var(--sage-light);">Case 02 · Landing Page</div>
+        <div class="project-name">FlowTech SaaS</div>
+        <p class="project-desc">Landing page de conversão para plataforma de automação B2B. Design dark, hierarquia clara e CTAs que triplicaram os cliques.</p>
+        <div class="project-tags">
+          <span class="project-tag">Figma</span>
+          <span class="project-tag">Landing Page</span>
+          <span class="project-tag">B2B</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Casa & Estilo -->
+    <div class="project-card reveal" style="transition-delay:0.2s">
+      <div class="project-visual" style="background:#f5f0e8;">
+        <div class="project-inner-mockup">
+          <div style="width:100%;max-width:280px;">
+            <div class="pm-browser">
+              <div class="pm-dots"><div class="pm-dot" style="background:#ff6b6b;"></div><div class="pm-dot" style="background:#ffd93d;"></div><div class="pm-dot" style="background:#6bcb77;"></div></div>
+              <div class="pm-url"></div>
+            </div>
+            <div class="pm-body" style="background:#f5f0e8;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:#3d2b1f;">Casa & Estilo</div>
+                <div style="font-size:7px;color:#888;">Carrinho (2)</div>
+              </div>
+              <div style="background:#c9903a;height:2px;margin-bottom:10px;border-radius:2px;"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                <div style="background:white;border-radius:8px;overflow:hidden;">
+                  <div style="background:#d4c4a8;height:55px;"></div>
+                  <div style="padding:6px;"><div style="font-size:7px;color:#888;">Vaso Cerâmica</div><div style="font-size:9px;font-weight:700;color:#c9903a;">R$ 89</div></div>
+                </div>
+                <div style="background:white;border-radius:8px;overflow:hidden;">
+                  <div style="background:#c8b89a;height:55px;"></div>
+                  <div style="padding:6px;"><div style="font-size:7px;color:#888;">Luminária</div><div style="font-size:9px;font-weight:700;color:#c9903a;">R$ 149</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hover-overlay" style="background:rgba(201,144,58,0.06)"></div>
+      </div>
+      <div class="project-meta">
+        <div class="project-type" style="color:var(--gold);">Case 03 · E-commerce</div>
+        <div class="project-name">Casa & Estilo</div>
+        <p class="project-desc">Loja de decoração com identidade visual sofisticada. Paleta terrosa, tipografia editorial e experiência de navegação premium.</p>
+        <div class="project-tags">
+          <span class="project-tag">E-commerce</span>
+          <span class="project-tag">Branding</span>
+          <span class="project-tag">UI Design</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NÚMEROS -->
+<section id="numeros">
+  <div class="section-label reveal">Resultados</div>
+  <h2 class="section-title reveal" style="color:var(--white);">Números que<br><span style="color:var(--coral);">comprovam.</span></h2>
+  <div class="numbers-grid reveal">
+    <div class="number-item">
+      <div class="number-big" id="n1">0</div>
+      <div class="number-label">Trabalhos entregues</div>
+    </div>
+    <div class="number-item">
+      <div class="number-big" id="n2" style="color:var(--sage-light);">0%</div>
+      <div class="number-label">Clientes satisfeitos</div>
+    </div>
+    <div class="number-item">
+      <div class="number-big" id="n3" style="color:var(--gold);">0h</div>
+      <div class="number-label">Entrega média</div>
+    </div>
+    <div class="number-item">
+      <div class="number-big" id="n4" style="color:var(--coral-light);">0</div>
+      <div class="number-label">Revisões sem custo extra</div>
+    </div>
+  </div>
+  <div class="disclaimer reveal">* Alguns dados dos clientes foram alterados para proteger informações sensíveis. Os resultados apresentados são estimativas baseadas em análises comparativas pré e pós entrega.</div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="reveal">
+    <div class="section-label">Vamos conversar</div>
+    <h2 class="section-title">Pronta para o<br>seu próximo projeto.</h2>
+    <p class="section-sub">Me manda uma mensagem e eu respondo em menos de 24h com uma proposta personalizada.</p>
+    <div class="contact-direct">
+      <a href="mailto:biancavilasb@gmail.com" class="contact-item">
+        <div class="contact-icon" style="background:#fff0ea;">📧</div>
+        <div>
+          <div class="contact-text-label">Email</div>
+          <div class="contact-text-val">biancavilasb@gmail.com</div>
+        </div>
+      </a>
+      <a href="https://wa.me/5561981599075" target="_blank" class="contact-item">
+        <div class="contact-icon" style="background:#f0fdf4;">💬</div>
+        <div>
+          <div class="contact-text-label">WhatsApp</div>
+          <div class="contact-text-val">(61) 98159-9075</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-form-wrap reveal" style="transition-delay:0.2s">
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;">Envie uma mensagem</h3>
+    <div class="form-group">
+      <label class="form-label">Seu nome</label>
+      <input type="text" class="form-input" placeholder="Como posso te chamar?">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email ou WhatsApp</label>
+      <input type="text" class="form-input" placeholder="Para eu retornar o contato">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tipo de projeto</label>
+      <select class="form-input">
+        <option value="">Selecione o serviço...</option>
+        <option>E-commerce</option>
+        <option>Landing Page</option>
+        <option>Site institucional</option>
+        <option>Prototipagem Figma</option>
+        <option>Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Conte um pouco sobre o projeto</label>
+      <textarea class="form-input" placeholder="Quanto mais detalhes, melhor a proposta!"></textarea>
+    </div>
+    <button class="form-btn" onclick="sendMsg()">Enviar mensagem ✦</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Bianca Vilas Boas<span>.</span></div>
+  <div>Designer Gráfica & Dev · Brasília, DF</div>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="mailto:biancavilasb@gmail.com">Email</a>
+    <a href="https://wa.me/5561981599075">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button, .chip, .project-card, .contact-item, .nav-cta').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// Counter animation
+function animCount(id, target, suffix, duration) {
+  const el = document.getElementById(id);
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const prog = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - prog, 3);
+    el.textContent = Math.floor(ease * target) + suffix;
+    if (prog < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+const numObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animCount('n1', 35, '+', 1800);
+      animCount('n2', 100, '%', 1600);
+      animCount('n3', 48, 'h', 1400);
+      animCount('n4', 2, '', 1200);
+      numObs.disconnect();
+    }
+  });
+}, { threshold: 0.4 });
+numObs.observe(document.getElementById('numeros'));
+
+// Form send
+function sendMsg() {
+  const btn = document.querySelector('.form-btn');
+  btn.textContent = 'Mensagem enviada! ✓';
+  btn.style.background = '#22c55e';
+  setTimeout(() => {
+    btn.textContent = 'Enviar mensagem ✦';
+    btn.style.background = '';
+  }, 3000);
+}
+
+// Chip toggle
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => chip.classList.toggle('active'));
+});
+
+// Nav shrink on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 60) nav.style.padding = '0.8rem 3rem';
+  else nav.style.padding = '1.2rem 3rem';
+});
+</script>
+</body>
+</html>
